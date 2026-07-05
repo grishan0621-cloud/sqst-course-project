@@ -57,8 +57,8 @@
 
 ```bash
 # 1. Клонировать репозиторий
-git clone https://github.com/<your-org>/otus-sonarqube-course.git
-cd otus-sonarqube-course
+git clone https://github.com/ignatenkofi/sqst-vulnerable-app.git
+cd sqst-vulnerable-app
 
 # 2. Проверить готовность окружения
 bash setup-check.sh
@@ -115,7 +115,7 @@ bash scan.sh
 | 1 | Введение | `docker-compose.yml`, `app.py` с 5 уязвимостями |
 | 2 | Быстрый старт | `scan.sh`, `utils.py` |
 | 3 | SAST & OWASP | Маппинг уязвимостей на OWASP Top 10 |
-| 4 | CI/CD | `Jenkinsfile`, `.gitlab-ci.yml` |
+| 4 | CI/CD | `Jenkinsfile`, `.gitlab-ci.yml`, `.github/workflows/sonarqube-scan.yml` |
 | 5 | Quality Gate | `quality-gate.json`, `setup-quality-gate.sh` |
 | 6 | False Positive | `fp-analysis.md`, NOSONAR с обоснованиями |
 | 7 | Security Hotspots | `hotspot-review.md` |

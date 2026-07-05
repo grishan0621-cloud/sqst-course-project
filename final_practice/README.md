@@ -1,9 +1,8 @@
 # sonar-report — скелет утилиты для финальной практики
 
 Скелет CLI-утилиты для финальной практики курса «Безопасный код с SonarQube»
-(OTUS). Полная спецификация задания —
-[Финальная практика.md](../../Финальная%20практика.md) в корне папки
-`lessons/15-lesson/`.
+(OTUS). Полная спецификация задания и критерии оценки — в материалах урока 15
+(«Финальная практика») в личном кабинете OTUS.
 
 ## Запуск
 
@@ -14,7 +13,7 @@ source venv/bin/activate
 pip install requests
 
 # Обязательные переменные окружения
-export SONAR_URL="http://192.168.30.106:9000"   # или http://localhost:9000
+export SONAR_URL="http://localhost:9000"        # или адрес вашего стенда SonarQube
 export SONAR_TOKEN="squ_..."                    # ваш Project Analysis Token
 export SONAR_PROJECT="vulnerable-app"
 
