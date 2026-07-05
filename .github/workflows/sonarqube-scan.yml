@@ -17,6 +17,11 @@
 #                       3) публичный SonarQube (например, SonarCloud — но это
 #                          уже отдельный продукт, не CE)
 #
+# Пока секреты не заданы (например, в апстрим-репо или в свежем форке),
+# шаг скана ПРОПУСКАЕТСЯ, а job завершается зелёным — чтобы не засорять
+# историю CI ложными падениями. Настройте секреты, и скан начнёт
+# выполняться на каждый push/PR в main.
+#
 # В Community Edition sonar.branch.name игнорируется, поэтому всё, что
 # не main, попадает в основную ветку проекта SonarQube. Для разделения
 # по веткам нужен Developer Edition+.
@@ -33,6 +38,9 @@ jobs:
   sonar-scan:
     name: SonarQube analysis
     runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN:    ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
     steps:
       - name: Checkout
@@ -51,11 +59,19 @@ jobs:
           python -m pip install --quiet flask
           echo "Smoke tests passed"
 
+      - name: Проверить, настроен ли SonarQube
+        id: sonar_cfg
+        run: |
+          if [ -z "${SONAR_HOST_URL}" ]; then
+            echo "::notice::SONAR_HOST_URL/SONAR_TOKEN не заданы — шаг скана пропущен. Настройте секреты в Settings → Secrets → Actions для реального анализа."
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: SonarQube Scan
+        if: steps.sonar_cfg.outputs.configured == 'true'
         uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN:    ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         with:
           args: >
             -Dsonar.projectKey=vulnerable-app
