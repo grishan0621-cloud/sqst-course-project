@@ -35,18 +35,28 @@ semgrep:
     when: always
 
 # Уровень 2: OWASP Dependency-Check
+# OWASP DC НЕ парсит requirements.txt — нужны installed packages
+# (*.dist-info/METADATA). Сначала ставим зависимости в .deps, затем сканируем .deps.
+# См. методичку L9 §4 «Что НЕ парсит OWASP DC».
 owasp-dependency-check:
   stage: dependency-check
-  image: owasp/dependency-check:latest
+  image:
+    name: owasp/dependency-check:latest
+    entrypoint: [""]
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq python3 python3-pip
+    - python3 -m pip install --break-system-packages --target=.deps -r backend/requirements.txt
   script:
     - /usr/share/dependency-check/bin/dependency-check.sh
       --project "vulnerable-app"
-      --scan backend/requirements.txt
-      --format JSON --out dependency-check-report.json
+      --scan .deps
+      --format JSON
+      --format HTML
+      --out dependency-check-report
       --failOnCVSS 9
   artifacts:
     paths:
-      - dependency-check-report.json
+      - dependency-check-report/
     when: always
 
 # Уровень 3: SonarQube (глубокий анализ)

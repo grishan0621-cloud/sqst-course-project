@@ -6,8 +6,8 @@
 ## Один раз — скачать репозиторий
 
 ```bash
-git clone https://github.com/<логин>/sqst-course-project.git
-cd sqst-course-project
+git clone https://github.com/<логин>/sqst-vulnerable-app.git
+cd sqst-vulnerable-app
 ```
 
 ## Перед каждым уроком — переключиться на нужный тег
@@ -51,7 +51,7 @@ git checkout lesson-02
 В браузере удобнее всего:
 
 ```
-https://github.com/<логин>/sqst-course-project/compare/lesson-01...lesson-02
+https://github.com/<логин>/sqst-vulnerable-app/compare/lesson-01...lesson-02
 ```
 
 Покажет все файлы и строчки, которые добавились/поменялись.
