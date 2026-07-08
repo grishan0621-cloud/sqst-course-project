@@ -6,7 +6,12 @@ version: '3.8'
 services:
   sonarqube:
     image: sonarqube:community
-    container_name: sonarqube
+    # Имя отличается от dev-стенда (там container_name: sonarqube),
+    # чтобы оба compose-файла можно было поднимать на одной машине.
+    container_name: sonarqube_prod
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
       SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
       SONAR_JDBC_USERNAME: sonar
@@ -29,15 +34,23 @@ services:
 
   db:
     image: postgres:15
+    container_name: sonarqube_db_prod
     environment:
       POSTGRES_USER: sonar
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
     volumes:
       - postgresql_data:/var/lib/postgresql/data
-      - ./performance/postgresql.conf:/etc/postgresql/postgresql.conf
+      # Относительные bind-пути резолвятся от каталога compose-файла,
+      # т.е. от performance/ — поэтому именно ./postgresql.conf.
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
     command: postgres -c config_file=/etc/postgresql/postgresql.conf
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sonar -d sonar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   sonarqube_data:
