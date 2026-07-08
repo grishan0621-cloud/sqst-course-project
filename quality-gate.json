@@ -1,5 +1,6 @@
 {
-  "_comment": "Кастомный Quality Gate 'OTUS Strict Gate'",
+  "_comment": "Кастомный Quality Gate 'OTUS Strict Gate'. Единственный источник правды: setup-quality-gate.sh читает name и conditions из этого файла — пороги правим здесь.",
+  "_mode_note": "Метрики vulnerabilities/bugs/new_* — из Standard Experience. В SonarQube CE 25+ по умолчанию включён режим MQR (Multi-Quality Rating), где UI показывает метрики software_quality_*, поэтому вид гейта в интерфейсе может отличаться. Чтобы UI совпадал с этим файлом один-в-один: Administration → Configuration → Mode → Standard Experience. Сам гейт работает в обоих режимах.",
   "name": "OTUS Strict Gate",
   "conditions": [
     { "metric": "vulnerabilities",     "op": "GT", "error": "0" },

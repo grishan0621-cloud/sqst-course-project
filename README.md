@@ -107,6 +107,8 @@ bash scan.sh
 
 `scan.sh` сам выбирает адрес SonarQube по платформе: на Linux — `http://localhost:9000` (сканер работает с `--network=host`), на macOS/Windows (Docker Desktop) — `http://host.docker.internal:9000`. Если SonarQube на другом адресе, переопределите переменной окружения: `SONAR_HOST=http://<host>:9000 bash scan.sh`.
 
+`setup-quality-gate.sh` читает имя гейта и условия из `quality-gate.json` — это единственный источник правды, пороги правим в JSON. Условия заданы в метриках **Standard Experience** (`vulnerabilities`, `bugs`, `new_*`). В SonarQube CE 25+ по умолчанию включён режим **MQR** (Multi-Quality Rating), где UI показывает метрики `software_quality_*`, поэтому созданный гейт в интерфейсе может выглядеть иначе, чем в JSON. Чтобы всё совпадало один-в-один, переключите режим: **Administration → Configuration → Mode → Standard Experience**. Сам гейт корректно работает в обоих режимах.
+
 ### CI/CD
 
 - `Jenkinsfile` — многоступенчатый пайплайн: checkout → scan → quality gate check
