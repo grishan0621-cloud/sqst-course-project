@@ -103,6 +103,8 @@ bash scan.sh
 | `scan.sh` | Запускает sonar-scanner с параметрами из `sonar-project.properties` |
 | `setup-quality-gate.sh` | Создаёт кастомный Quality Gate «OTUS Strict Gate» через REST API SonarQube |
 
+`scan.sh` сам выбирает адрес SonarQube по платформе: на Linux — `http://localhost:9000` (сканер работает с `--network=host`), на macOS/Windows (Docker Desktop) — `http://host.docker.internal:9000`. Если SonarQube на другом адресе, переопределите переменной окружения: `SONAR_HOST=http://<host>:9000 bash scan.sh`.
+
 ### CI/CD
 
 - `Jenkinsfile` — многоступенчатый пайплайн: checkout → scan → quality gate check
