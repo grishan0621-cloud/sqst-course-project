@@ -10,23 +10,32 @@ GATE_NAME="OTUS Strict Gate"
 
 echo "Создаём Quality Gate: ${GATE_NAME}"
 
-GATE_ID=$(curl -s -u "${TOKEN}:" \
-  -X POST "${HOST}/api/qualitygates/create" \
-  -d "name=${GATE_NAME}" | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
+# С SonarQube 10.x параметр gateId в create_condition/select объявлен
+# deprecated, а в актуальных CE (25/26.x) вызовы с gateId не работают.
+# Работаем только с gateName и не полагаемся на id из ответа create.
+# --data-urlencode — потому что в имени гейта есть пробелы.
+curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/create" \
+  --data-urlencode "name=${GATE_NAME}" > /dev/null
 
 curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/create_condition" \
-  -d "gateId=${GATE_ID}&metric=vulnerabilities&op=GT&error=0" > /dev/null
+  --data-urlencode "gateName=${GATE_NAME}" \
+  -d "metric=vulnerabilities&op=GT&error=0" > /dev/null
 
 curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/create_condition" \
-  -d "gateId=${GATE_ID}&metric=bugs&op=GT&error=2" > /dev/null
+  --data-urlencode "gateName=${GATE_NAME}" \
+  -d "metric=bugs&op=GT&error=2" > /dev/null
 
 curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/create_condition" \
-  -d "gateId=${GATE_ID}&metric=new_vulnerabilities&op=GT&error=0" > /dev/null
+  --data-urlencode "gateName=${GATE_NAME}" \
+  -d "metric=new_vulnerabilities&op=GT&error=0" > /dev/null
 
 curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/create_condition" \
-  -d "gateId=${GATE_ID}&metric=new_bugs&op=GT&error=0" > /dev/null
+  --data-urlencode "gateName=${GATE_NAME}" \
+  -d "metric=new_bugs&op=GT&error=0" > /dev/null
 
 curl -s -u "${TOKEN}:" -X POST "${HOST}/api/qualitygates/select" \
-  -d "gateId=${GATE_ID}&projectKey=vulnerable-app" > /dev/null
+  --data-urlencode "gateName=${GATE_NAME}" \
+  -d "projectKey=vulnerable-app" > /dev/null
 
-echo "Quality Gate ${GATE_NAME} создан. Открой: ${HOST}/quality_gates/show/${GATE_ID}"
+echo "Quality Gate «${GATE_NAME}» создан и назначен проекту vulnerable-app."
+echo "Открой: ${HOST}/quality_gates/show/OTUS%20Strict%20Gate"
