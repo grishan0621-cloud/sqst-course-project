@@ -20,9 +20,12 @@ test:
     - echo "Tests passed"
 
 # Уровень 1: Semgrep (быстрый SAST, результат — через 10-30 сек)
+# Официальный образ после ребрендинга r2c → Semgrep живёт в semgrep/semgrep
+# (returntocorp/semgrep больше не обновляется). Тег запинен для
+# воспроизводимости; актуальные версии: https://hub.docker.com/r/semgrep/semgrep
 semgrep:
   stage: sast
-  image: returntocorp/semgrep:latest
+  image: semgrep/semgrep:1.168.0
   script:
     - semgrep --config .semgrep.yml --json --output semgrep-report.json
       backend/ frontend/ || true
