@@ -129,7 +129,7 @@ echo ""
 echo -e "${BLUE}[5] Файлы проекта${NC}"
 check "docker-compose.yml существует" "test -f docker-compose.yml"
 check "sonar-project.properties существует" "test -f sonar-project.properties"
-check "vulnerable-app/app.py существует" "test -f vulnerable-app/app.py"
+check "backend/app.py существует" "test -f backend/app.py"
 echo ""
 
 # --- Итог ---

@@ -23,7 +23,7 @@ Security Hotspot — это место в коде, которое *может* 
 | Поле | Значение |
 |------|----------|
 | Правило | `python:S4790` — Weak Hashing |
-| Файл | `vulnerable-app/app.py`, строка ~130 |
+| Файл | `backend/app.py`, строка ~130 |
 | OWASP | A02:2021 Cryptographic Failures |
 | Статус | **ACKNOWLEDGED** |
 | Решение | Намеренная уязвимость для демонстрации MD5. Backlog: заменить на bcrypt. |
@@ -34,7 +34,7 @@ Security Hotspot — это место в коде, которое *может* 
 | Поле | Значение |
 |------|----------|
 | Правило | `python:S4721` — OS Command Injection |
-| Файл | `vulnerable-app/app.py`, строка ~97 |
+| Файл | `backend/app.py`, строка ~97 |
 | OWASP | A03:2021 Injection |
 | Статус | **ACKNOWLEDGED** |
 | Решение | Критическая уязвимость для демонстрации CWE-78. Добавить в backlog исправления. |
@@ -45,7 +45,7 @@ Security Hotspot — это место в коде, которое *может* 
 | Поле | Значение |
 |------|----------|
 | Правило | `python:S5659` — Debug Mode |
-| Файл | `vulnerable-app/app.py`, последняя строка |
+| Файл | `backend/app.py`, последняя строка |
 | OWASP | A05:2021 Security Misconfiguration |
 | Статус | **ACKNOWLEDGED** |
 | Решение | Намеренно для учебного окружения. В production использовать `debug=False`. |

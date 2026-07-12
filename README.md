@@ -15,21 +15,16 @@
 ├── scan.sh                         # Запуск sonar-scanner из CLI
 ├── setup-check.sh                  # Проверка готовности окружения
 ├── setup-quality-gate.sh           # Настройка кастомного Quality Gate через API
-├── quality-gate.json               # Определение OTUS Strict Gate (пороги качества)
+├── quality-gate.json               # Определение Quality Gate «OTUS-Strict» (пороги)
 ├── Jenkinsfile                     # CI/CD-пайплайн для Jenkins
 ├── fp-analysis.md                  # Документация по False Positive анализу
 ├── hotspot-review.md               # Аудит Security Hotspot-ов
 ├── access-policy.md                # Ролевая модель и hardening SonarQube
 │
-├── vulnerable-app/                 # Учебное Flask-приложение (намеренно уязвимое)
+├── backend/                        # Учебное Flask-приложение (намеренно уязвимое)
 │   ├── app.py                      # Основной модуль — SQL Injection, XSS, Path Traversal и др.
 │   ├── utils.py                    # Вспомогательные функции с уязвимостями
-│   └── requirements.txt            # Зависимости с известными CVE (для Dependency-Check)
-│
-├── backend/                        # Backend-модуль (многомодульная структура, урок 11+)
-│   ├── app.py                      # Flask-приложение
-│   ├── utils.py                    # Утилиты
-│   ├── requirements.txt            # Python-зависимости
+│   ├── requirements.txt            # Зависимости с известными CVE (для Dependency-Check)
 │   └── sonar-project.properties    # Параметры анализа backend-модуля
 │
 ├── frontend/                       # Frontend-модуль (JavaScript, урок 8+)
@@ -77,13 +72,11 @@ bash scan.sh
 
 ## Описание компонентов
 
-### vulnerable-app/
-
-**Учебное Flask-приложение**, намеренно содержащее уязвимости для демонстрации возможностей SonarQube. Включает 5+ типов уязвимостей: SQL Injection, XSS, Path Traversal, использование eval(), хардкод секретов. Файл `requirements.txt` содержит зависимости с известными CVE для демонстрации OWASP Dependency-Check.
-
 ### backend/ и frontend/
 
-**Многомодульная структура** (с урока 11). Демонстрирует раздельный анализ модулей с индивидуальными `sonar-project.properties`. Backend — Python/Flask, Frontend — JavaScript/Node.js.
+**Backend** — учебное Flask-приложение, намеренно содержащее уязвимости для демонстрации возможностей SonarQube: 5+ типов (SQL Injection, XSS, Path Traversal, использование eval(), хардкод секретов). Файл `requirements.txt` содержит зависимости с известными CVE для демонстрации OWASP Dependency-Check. **Frontend** — JavaScript/Node.js-приложение с типичными JS-уязвимостями.
+
+Вместе они образуют **многомодульную структуру** (с урока 11): раздельный анализ модулей с индивидуальными `sonar-project.properties`, общий скан — `sonar.sources=backend,frontend`.
 
 ### performance/
 
@@ -103,7 +96,7 @@ bash scan.sh
 |--------|----------|
 | `setup-check.sh` | Проверяет наличие Docker, Docker Compose, Java, sonar-scanner. Выводит статус готовности |
 | `scan.sh` | Запускает sonar-scanner с параметрами из `sonar-project.properties` |
-| `setup-quality-gate.sh` | Создаёт кастомный Quality Gate «OTUS Strict Gate» через REST API SonarQube |
+| `setup-quality-gate.sh` | Создаёт канонический Quality Gate курса «OTUS-Strict» через REST API SonarQube |
 
 `scan.sh` сам выбирает адрес SonarQube по платформе: на Linux — `http://localhost:9000` (сканер работает с `--network=host`), на macOS/Windows (Docker Desktop) — `http://host.docker.internal:9000`. Если SonarQube на другом адресе, переопределите переменной окружения: `SONAR_HOST=http://<host>:9000 bash scan.sh`.
 
@@ -158,4 +151,4 @@ Weekly      → Semgrep OWASP ruleset (глубокий аудит)
 - **Методические тексты** (`*.md`: памятки, обзоры, материалы аудита) — [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.ru): используйте и адаптируйте с указанием авторства.
 - Если в репозитории появляются заимствованные (vendored) сторонние компоненты, они сохраняют свои оригинальные лицензии.
 
-**Дисклеймер.** Код в `vulnerable-app/`, `backend/` и `frontend/` **намеренно содержит уязвимости** (SQL Injection, XSS, Path Traversal, hardcoded-секреты и др.) — это учебный материал для демонстрации SAST-инструментов. Используйте его только в изолированном учебном окружении. **Никогда не разворачивайте это приложение в production, на общедоступных серверах или в сетях с реальными данными.** Авторы не несут ответственности за последствия такого развёртывания (см. LICENSE).
+**Дисклеймер.** Код в `backend/` и `frontend/` **намеренно содержит уязвимости** (SQL Injection, XSS, Path Traversal, hardcoded-секреты и др.) — это учебный материал для демонстрации SAST-инструментов. Используйте его только в изолированном учебном окружении. **Никогда не разворачивайте это приложение в production, на общедоступных серверах или в сетях с реальными данными.** Авторы не несут ответственности за последствия такого развёртывания (см. LICENSE).
