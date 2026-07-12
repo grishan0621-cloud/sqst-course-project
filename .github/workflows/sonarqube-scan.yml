@@ -76,5 +76,5 @@ jobs:
           args: >
             -Dsonar.projectKey=vulnerable-app
             -Dsonar.projectVersion=1.0-lesson4
-            -Dsonar.sources=vulnerable-app
+            -Dsonar.sources=backend,frontend
             -Dsonar.qualitygate.wait=true

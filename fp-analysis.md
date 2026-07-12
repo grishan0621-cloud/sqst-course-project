@@ -14,7 +14,7 @@
 | Поле          | Значение                                                |
 |---------------|---------------------------------------------------------|
 | Правило       | python:S2068 (Vulnerability, MAJOR)                     |
-| Файл          | vulnerable-app/app.py:31 (`DB_PASSWORD = "admin123"`)   |
+| Файл          | backend/app.py:31 (`DB_PASSWORD = "admin123"`)   |
 | Решение       | Won't Fix                                               |
 | Обоснование   | Тестовые данные, намеренно в коде для демонстрации CWE-798 (Hard-coded Credentials). В production не попадает. |
 | Дата          | 2026-04-22                                              |
