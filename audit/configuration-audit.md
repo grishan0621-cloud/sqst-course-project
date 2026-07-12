@@ -34,7 +34,7 @@ sonar.exclusions=**/__pycache__/**,**/*.pyc,**/node_modules/**
 
 **Было:** Для `main` — строгий QG, для feature-веток — без QG
 
-**Стало:** Единый QG `OTUS Strict Gate` для всех веток
+**Стало:** Единый QG `OTUS-Strict` для всех веток
 
 **Статус:** ✅ Исправлено в `.gitlab-ci.yml`
 
