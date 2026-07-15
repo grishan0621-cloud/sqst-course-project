@@ -137,7 +137,7 @@ def hash_password(password: str) -> str:
     MD5 считается криптографически слабым с 1996 года.
     """
     # УЯЗВИМОСТЬ: MD5 слаб, нет соли (CWE-326, A02)
-    return hashlib.md5(password.encode()).hexdigest()  # WEAK CRYPTO! NOSONAR: учебный пример (CWE-326, Won't Fix)
+    return hashlib.md5(password.encode()).hexdigest()  # NOSONAR: не критично
 
 
 # =============================================================================
