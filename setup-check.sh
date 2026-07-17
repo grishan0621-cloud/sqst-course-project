@@ -97,17 +97,25 @@ if [ -f /proc/sys/vm/max_map_count ]; then
     fi
 fi
 
-# Проверка свободного места (нужно минимум 5GB)
-FREE_GB=$(df -BG . | awk 'NR==2 {gsub("G",""); print $4}')
-if [ "$FREE_GB" -ge 10 ]; then
-    echo -e "  ${GREEN}✓${NC} Свободное место: ${FREE_GB}GB"
-    ((PASS++))
-elif [ "$FREE_GB" -ge 5 ]; then
-    echo -e "  ${YELLOW}⚠${NC} Свободное место: ${FREE_GB}GB (рекомендуется 10GB)"
-    ((WARN++))
+# Проверка свободного места (нужно минимум 5GB).
+# df -Pk — POSIX: работает и с GNU coreutils (Linux), и с BSD df (macOS);
+# флаг -B есть только у GNU, на маке он валил проверку в безусловный FAIL.
+FREE_KB=$(df -Pk . 2>/dev/null | awk 'NR==2 {print $4}')
+if [ -n "$FREE_KB" ] && [ "$FREE_KB" -eq "$FREE_KB" ] 2>/dev/null; then
+    FREE_GB=$((FREE_KB / 1024 / 1024))
+    if [ "$FREE_GB" -ge 10 ]; then
+        echo -e "  ${GREEN}✓${NC} Свободное место: ${FREE_GB}GB"
+        ((PASS++))
+    elif [ "$FREE_GB" -ge 5 ]; then
+        echo -e "  ${YELLOW}⚠${NC} Свободное место: ${FREE_GB}GB (рекомендуется 10GB)"
+        ((WARN++))
+    else
+        echo -e "  ${RED}✗${NC} Свободное место: ${FREE_GB}GB (нужно минимум 5GB)"
+        ((FAIL++))
+    fi
 else
-    echo -e "  ${RED}✗${NC} Свободное место: ${FREE_GB}GB (нужно минимум 5GB)"
-    ((FAIL++))
+    echo -e "  ${YELLOW}⚠${NC} Свободное место: не удалось определить (df вернул пусто)"
+    ((WARN++))
 fi
 echo ""
 
